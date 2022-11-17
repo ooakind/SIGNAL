@@ -30,7 +30,6 @@ public class LocationService extends Service {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            Log.v("LOCATION_UPDATE", "??");
             if (locationResult != null && locationResult.getLastLocation() != null){
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
@@ -46,7 +45,6 @@ public class LocationService extends Service {
     }
 
     private void startLocationService () {
-        Log.v("Debug", "123");
         String channelId = "location_notification_channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent resultIntent = new Intent();
@@ -74,7 +72,6 @@ public class LocationService extends Service {
         lBuilder.setMinUpdateIntervalMillis(2000);
         lBuilder.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
 
-        Log.v("Debug", "!!");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -86,7 +83,6 @@ public class LocationService extends Service {
             return;
         }
         LocationRequest locationRequest = lBuilder.build();
-        Log.v("Debug", "??");
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
         startForeground(Constants.LOCATION_SERVICE_ID, builder.build());
     }
@@ -99,12 +95,10 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v("Debug", "123");
         if (intent != null) {
             String action = intent.getAction();
             if (action != null) {
                 if (action.equals(Constants.ACTION_START_LOCATION_SERVICE)) {
-                    Log.v("Debug", "456");
                     startLocationService();
                 } else if (action.equals(Constants.ACTION_STOP_LOCATION_SERVICE)) {
                     stopLocationService();

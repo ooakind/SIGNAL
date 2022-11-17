@@ -34,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        findViewById(R.id.sensingStop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopLocationService();
+            }
+        });
     }
 
     private boolean isLocationServiceRunning() {
@@ -55,11 +62,17 @@ public class MainActivity extends AppCompatActivity {
         if (!isLocationServiceRunning()){
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
             intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
-            Log.v("before", "start");
             startService(intent);
-
-            Log.v("after", "start");
             Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void stopLocationService(){
+        if (isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+            intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
         }
     }
 }
