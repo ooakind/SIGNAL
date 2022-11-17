@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-    static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
 
 
     @Override
@@ -39,15 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isLocationServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        Log.v("Debug", "1");
         if (activityManager != null) {
-            Log.v("Debug", "2");
             for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-                Log.v("Debug", "3");
                 if (LocationService.class.getName().equals(service.service.getClassName())) {
-                    Log.v("Debug", "4");
                     if (service.foreground) {
-                        Log.v("Debug", "5");
                         return true;
                     }
                 }
@@ -60,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private void startLocationService(){
         if (!isLocationServiceRunning()){
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
-            intent.setAction(ACTION_START_LOCATION_SERVICE);
+            intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
+            Log.v("before", "start");
             startService(intent);
+
+            Log.v("after", "start");
             Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
         }
     }
