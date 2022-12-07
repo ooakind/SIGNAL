@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -24,8 +25,28 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 
 public class LocationService extends Service {
+
+    private Handler mHandler;
+
+    private Socket socket;
+
+    private DataOutputStream dos;
+    private DataInputStream dis;
+
+    private String ip = "192.168.50.217";
+    private int port = 8080;
+
+    private int locationState = 0;
+
+
     private LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
@@ -33,7 +54,8 @@ public class LocationService extends Service {
             if (locationResult != null && locationResult.getLastLocation() != null){
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
-                Log.v("LOCATION_UPDATE", latitude + ", " + longitude);
+                connect(latitude, longitude);
+                Log.v("Connect", "state: " + locationState);
             }
         }
     };
@@ -106,5 +128,36 @@ public class LocationService extends Service {
             }
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void connect(double latitude, double longitude) {
+        mHandler = new Handler();
+        Thread checkUpdate = new Thread() {
+            public void run() {
+                try{
+                    socket = new Socket(ip, port);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    if (socket == null)
+                        System.out.println("???");
+                    System.out.println(socket.getOutputStream());
+                    dos = new DataOutputStream(socket.getOutputStream());
+                    dis = new DataInputStream(socket.getInputStream());
+                    dos.writeUTF(latitude + " " + longitude);
+                    dos.flush();
+
+                    locationState = dis.readInt();
+
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        };
+        checkUpdate.start();
     }
 }
