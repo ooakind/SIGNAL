@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             Address address = addresses.get(0);
-            return address.getAddressLine(0).toString();
+            return address.getAddressLine(0);
         }
     }
 
