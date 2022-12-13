@@ -19,6 +19,13 @@
         android:theme="@style/Theme.Signal"
         tools:targetApi="31">
         <activity
+            android:name=".PreferredTimingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MapActivity"
             android:exported="false">
             <meta-data
