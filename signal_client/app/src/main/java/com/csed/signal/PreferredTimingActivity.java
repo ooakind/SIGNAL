@@ -13,10 +13,10 @@ public class PreferredTimingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferred_timing);
 
-        setListners();
+        setListeners();
     }
 
-    public void setListners(){
+    public void setListeners(){
         ((Button) findViewById(R.id.shareFast)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
