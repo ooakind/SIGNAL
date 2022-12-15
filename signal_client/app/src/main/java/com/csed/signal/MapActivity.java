@@ -18,14 +18,24 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MapActivity extends AppCompatActivity
             implements OnMapReadyCallback{
@@ -38,6 +48,8 @@ public class MapActivity extends AppCompatActivity
 
     private List<Marker> preferredLocations;
     private List<Marker> dislikedLocations;
+
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,8 @@ public class MapActivity extends AppCompatActivity
         finishButtonEnable(true);
         preferredLocations = new ArrayList<>();
         dislikedLocations = new ArrayList<>();
+
+
     }
 
     public void setListeners() {
@@ -100,10 +114,79 @@ public class MapActivity extends AppCompatActivity
     }
 
     public void getUserData(){ // get data from user config
+        Call<data_model> call = retrofit_client.getApiService().getData(new data_model("test", new ArrayList<HashMap<String, String>>(), "fast"));
+        call.enqueue(new Callback<data_model>() {
+            @Override
+            public void onResponse(Call<data_model> call, Response<data_model> response) {
+                data_model result = response.body();
+                ArrayList<HashMap<String, String>> latlng = result.getLatlng();
+                userType = result.getType();
+                for (int i = 0; i < latlng.size(); i++){
+                    Double lat = Double.parseDouble(latlng.get(i).get("lat"));
+                    Double lng = Double.parseDouble(latlng.get(i).get("lng"));
+                    LatLng ll = new LatLng(lat, lng);
 
+                    boolean isPreferred;
+                    if (Objects.equals(latlng.get(i).get("type"), "pref"))
+                        isPreferred = true;
+                    else if (Objects.equals(latlng.get(i).get("type"), "dis"))
+                        isPreferred = false;
+                    else
+                        continue;
+
+                    setUserDataMarkerOptions(ll, latlng.get(i).get("name"), "위도:" + lat + " 경도:" + lng, isPreferred);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<data_model> call, Throwable t) {
+                //Log.d("??", t.toString());
+            }
+        });
     }
 
     public void sendUserData(){ // send data to user config
+        ArrayList<HashMap<String, String>> locationData = new ArrayList<>();
+
+        int i = 0;
+        for (Marker m : preferredLocations){
+            HashMap<String, String> hm = new HashMap<>();
+            hm.put("type", "pref");
+            hm.put("lat", Double.toString(m.getPosition().latitude));
+            hm.put("lng", Double.toString(m.getPosition().longitude));
+            //hm.put("name", m.getTitle());
+            hm.put("name", "Good English Name " + i);
+            i++;
+            locationData.add(hm);
+        }
+
+        for (Marker m : dislikedLocations){
+            HashMap<String, String> hm = new HashMap<>();
+            hm.put("type", "dis");
+            hm.put("lat", Double.toString(m.getPosition().latitude));
+            hm.put("lng", Double.toString(m.getPosition().longitude));
+            //hm.put("name", m.getTitle());
+            hm.put("name", "Good English Name " + i);
+            i++;
+            locationData.add(hm);
+        }
+
+        data_model dm = new data_model("test", locationData, userType);
+
+        Call<data_model> call = retrofit_client.getApiService().setData(dm);
+        call.enqueue(new Callback<data_model>() {
+            @Override
+            public void onResponse(Call<data_model> call, Response<data_model> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<data_model> call, Throwable t) {
+
+            }
+        });
 
     }
 

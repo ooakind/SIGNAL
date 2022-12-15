@@ -9,6 +9,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:text="current type: "
+        android:id="@+id/currentType"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="20sp"
         android:text="Q. If you have some hard time, do you want to share your emotion immediately or not?"

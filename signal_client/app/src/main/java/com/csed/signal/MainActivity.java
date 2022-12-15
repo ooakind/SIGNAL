@@ -23,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setListeners();
+    }
 
+    private void setListeners(){
         findViewById(R.id.sensingStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.finishApp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
