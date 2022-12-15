@@ -1,0 +1,7 @@
+fast
+pref
+Seoul
+37.5668 126.97742
+dis
+Seoul 2dong
+37.5668 126.98742
