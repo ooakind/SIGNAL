@@ -27,8 +27,14 @@
         android:id="@+id/settingMarker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="set your preferred location!"
+        android:text="set location"
         />
 
+    <Button
+        android:id="@+id/settingPreference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="set preference"
+        />
 
 </LinearLayout >

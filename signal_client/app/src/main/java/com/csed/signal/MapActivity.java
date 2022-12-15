@@ -51,6 +51,7 @@ public class MapActivity extends AppCompatActivity
         setListeners();
         preferredButtonEnable(false);
         removeButtonEnable(false);
+        finishButtonEnable(true);
         preferredLocations = new ArrayList<>();
         dislikedLocations = new ArrayList<>();
     }
@@ -62,6 +63,7 @@ public class MapActivity extends AppCompatActivity
                 setUserDataMarkerOptions(currentMarker.getPosition(), currentMarker.getTitle(), currentMarker.getSnippet(), true);
                 currentMarker.remove();
                 preferredButtonEnable(false);
+                finishButtonEnable(true);
             }
         });
         ((Button)findViewById(R.id.setDislike)).setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,7 @@ public class MapActivity extends AppCompatActivity
                 setUserDataMarkerOptions(currentMarker.getPosition(), currentMarker.getTitle(), currentMarker.getSnippet(), false);
                 currentMarker.remove();
                 preferredButtonEnable(false);
+                finishButtonEnable(true);
             }
         });
         ((Button)findViewById(R.id.removeMarker)).setOnClickListener(new View.OnClickListener() {
@@ -81,21 +84,19 @@ public class MapActivity extends AppCompatActivity
                 if (dislikedLocations.remove(selectedMarker)){
                     selectedMarker.remove();
                 }
+
+                finishButtonEnable(true);
                 removeButtonEnable(false);
             }
         });
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        ((Button)findViewById(R.id.finishButton)).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                if (preferredLocations.contains(marker) || dislikedLocations.contains(marker)){
-                    preferredButtonEnable(false);
-                    removeButtonEnable(true);
-                }
-                selectedMarker = marker;
-                return false;
+            public void onClick(View view) {
+
+                finish();
             }
         });
+
     }
 
     public void getUserData(){ // get data from user config
@@ -129,10 +130,15 @@ public class MapActivity extends AppCompatActivity
     public void preferredButtonEnable(boolean b){
         int visibility = b ? View.VISIBLE : View.INVISIBLE;
         ((Button) findViewById(R.id.setDislike)).setVisibility(visibility);
+        ((Button) findViewById(R.id.setPreferred)).setVisibility(visibility);
     }
     public void removeButtonEnable(boolean b){
         int visibility = b ? View.VISIBLE : View.INVISIBLE;
         ((Button) findViewById(R.id.removeMarker)).setVisibility(visibility);
+    }
+    public void finishButtonEnable(boolean b){
+        int visibility = b ? View.VISIBLE : View.INVISIBLE;
+        ((Button) findViewById(R.id.finishButton)).setVisibility(visibility);
     }
 
     @Override
@@ -168,6 +174,19 @@ public class MapActivity extends AppCompatActivity
 
                 //현재 위치에 마커 생성하고 이동
                 setCurrentLocation(latLng, markerTitle, markerSnippet);
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                if (preferredLocations.contains(marker) || dislikedLocations.contains(marker)){
+                    preferredButtonEnable(false);
+                    removeButtonEnable(true);
+                    finishButtonEnable(false);
+                }
+                selectedMarker = marker;
+                return false;
             }
         });
 
@@ -209,6 +228,7 @@ public class MapActivity extends AppCompatActivity
         mMap.moveCamera(cameraUpdate);
         preferredButtonEnable(true);
         removeButtonEnable(false);
+        finishButtonEnable(false);
     }
 
     @Override

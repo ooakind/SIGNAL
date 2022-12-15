@@ -21,19 +21,18 @@ public class PreferredTimingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendData(true);
-                finish();
             }
         });
         ((Button) findViewById(R.id.shareSlow)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendData(false);
-                finish();
             }
         });
     }
 
     public void sendData(boolean isFast){ // send data to user config
+        finish();
 
     }
 }
