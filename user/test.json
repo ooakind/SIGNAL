@@ -1,0 +1,42 @@
+{
+  "latlng": [
+    {
+      "lng": "126.9755444303155",
+      "name": "Good English Name 0",
+      "type": "pref",
+      "lat": "37.57437236903301"
+    },
+    {
+      "lng": "126.9277387484908",
+      "name": "Good English Name 1",
+      "type": "pref",
+      "lat": "37.550792516169786"
+    },
+    {
+      "lng": "127.027459256351",
+      "name": "Good English Name 2",
+      "type": "pref",
+      "lat": "37.56521484411434"
+    },
+    {
+      "lng": "126.99790198355915",
+      "name": "Good English Name 3",
+      "type": "dis",
+      "lat": "37.539034219275734"
+    },
+    {
+      "lng": "126.98563389480114",
+      "name": "Good English Name 4",
+      "type": "dis",
+      "lat": "37.48431244367258"
+    },
+    {
+      "lng": "127.02203884720802",
+      "name": "Good English Name 5",
+      "type": "dis",
+      "lat": "37.5867701715334"
+    }
+  ],
+  "type": "unknown",
+  "user_id": "test"
+}
