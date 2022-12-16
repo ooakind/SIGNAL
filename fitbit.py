@@ -25,9 +25,22 @@ class Fitbit:
         with open(filepath, 'w') as json_file:
             json.dump(res.json(), json_file)
 
-    def get_activity(self, date="today", period="1d", granularity="15min", filepath="activity.json"):
-        uri = f'https://api.fitbit.com/1/user/{self.userid}/activities/calories/date/{date}/{period}/{granularity}.json'
+    def get_activity(self, date="today", period="1d", granularity="15min", resource="calories", filepath="activity.json"):
+        uri = f'https://api.fitbit.com/1/user/{self.userid}/activities/{resource}/date/{date}/{period}/{granularity}.json'
         res = requests.get(uri, headers={"Authorization": f'Bearer {self.access_token}'})
         with open(filepath, 'w') as json_file:
             json.dump(res.json(), json_file)
+    
+    # Get a list of all fitbit activities.
+    def get_activity_all(self, filepath="activity_all.json"):
+        uri = f'https://api.fitbit.com/1/activities.json'
+        res = requests.get(uri, headers={"Authorization": f'Bearer {self.access_token}'})
+        with open(filepath, 'w') as json_file:
+            json.dump(res.json(), json_file)
+    
+    def get_activity_test(self, uri, filepath="activity_test.json"):
+        res = requests.get(uri, headers={"Authorization": f'Bearer {self.access_token}'})
+        with open(filepath, 'w') as json_file:
+            json.dump(res.json(), json_file)        
+
 
