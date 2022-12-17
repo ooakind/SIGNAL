@@ -37,6 +37,7 @@
       "lat": "37.5867701715334"
     }
   ],
-  "type": "unknown",
-  "user_id": "test"
+  "type": "fast",
+  "user_id": "test",
+  "cred_file": "credential_test.json"
 }

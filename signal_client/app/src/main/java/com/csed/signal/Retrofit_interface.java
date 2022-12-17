@@ -1,5 +1,7 @@
 package com.csed.signal;
 
+import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -12,5 +14,9 @@ public interface Retrofit_interface {
 
     @POST("setData")
     Call<data_model> setData(@Body data_model dataModel);
+
+
+    @POST("getState")
+    Call<HashMap<String, Double>> getState(@Body currentLocationDataModel locModel);
 
 }
