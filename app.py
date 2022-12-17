@@ -44,7 +44,7 @@ def set_data():
     data['cred_file'] = 'credential_test.json'
 
     with open("user/" + user_id + ".json", "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, ensure_ascii=False)
             
     return {}
 
