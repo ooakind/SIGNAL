@@ -30,6 +30,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class LocationService extends Service {
@@ -41,8 +47,6 @@ public class LocationService extends Service {
     private DataOutputStream dos;
     private DataInputStream dis;
 
-    private String ip = "192.168.50.217";
-    private int port = 8080;
 
     private int locationState = 0;
 
@@ -55,7 +59,27 @@ public class LocationService extends Service {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
                 connect(latitude, longitude);
-                Log.v("Connect", "state: " + locationState);
+
+                HashMap<String, Double> ll = new HashMap<>();
+                ll.put("lat", latitude);
+                ll.put("lng", longitude);
+
+                Call<HashMap<String, Double>> call = retrofit_client.getApiService().getState(new currentLocationDataModel("test", ll));
+                call.enqueue(new Callback<HashMap<String, Double>>() {
+                    @Override
+                    public void onResponse(Call<HashMap<String, Double>> call, Response<HashMap<String, Double>> response) {
+                        HashMap<String, Double> stateBody = response.body();
+                        Log.d("State ", Double.toString(stateBody.get("state")));
+                        Log.d("Score", Double.toString(stateBody.get("score")));
+                    }
+
+                    @Override
+                    public void onFailure(Call<HashMap<String, Double>> call, Throwable t) {
+
+                    }
+                });
+
+
             }
         }
     };
@@ -135,7 +159,7 @@ public class LocationService extends Service {
         Thread checkUpdate = new Thread() {
             public void run() {
                 try{
-                    socket = new Socket(ip, port);
+                    socket = new Socket(Constants.IP, Constants.PORT);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

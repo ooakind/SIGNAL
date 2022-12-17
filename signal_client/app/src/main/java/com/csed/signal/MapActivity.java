@@ -156,8 +156,7 @@ public class MapActivity extends AppCompatActivity
             hm.put("type", "pref");
             hm.put("lat", Double.toString(m.getPosition().latitude));
             hm.put("lng", Double.toString(m.getPosition().longitude));
-            //hm.put("name", m.getTitle());
-            hm.put("name", "Good English Name " + i);
+            hm.put("name", m.getTitle().substring(11));
             i++;
             locationData.add(hm);
         }
@@ -167,8 +166,7 @@ public class MapActivity extends AppCompatActivity
             hm.put("type", "dis");
             hm.put("lat", Double.toString(m.getPosition().latitude));
             hm.put("lng", Double.toString(m.getPosition().longitude));
-            //hm.put("name", m.getTitle());
-            hm.put("name", "Good English Name " + i);
+            hm.put("name", m.getTitle().substring(9));
             i++;
             locationData.add(hm);
         }
@@ -192,7 +190,7 @@ public class MapActivity extends AppCompatActivity
 
     public void setUserDataMarkerOptions(LatLng latlng, String markerTitle, String markerSnippet, boolean isPreferred){
 
-        String header = isPreferred ? "<Preferred> " : "<Dislike>";
+        String header = isPreferred ? "<Preferred>" : "<Dislike>";
         float color = isPreferred ? BitmapDescriptorFactory.HUE_RED : BitmapDescriptorFactory.HUE_BLUE;
 
         MarkerOptions markerOptions = new MarkerOptions();

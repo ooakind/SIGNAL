@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_restx import Api, Resource
 import json
 import os
+import opportune_moment
 
 app = Flask(__name__)
 
@@ -16,9 +17,10 @@ def get_data():
     if not os.path.exists("user/" + user_id + ".json"):
         return {"user_id" : user_id, "latlng" : [], "type" : "unknown"}
         
-    d = {"user_id" : user_id, "latlng" : []}
     with open("user/" + user_id + ".json", "r") as f:
         json_object = json.load(f)
+
+    del(json_object["cred_file"])
     
     return jsonify(json_object)
 
@@ -39,13 +41,19 @@ def set_data():
 
     data['latlng'] = data.get("latlng", latlng)
     data['type'] = data.get("type", type_of_user)
+    data['cred_file'] = 'credential_test.json'
 
     with open("user/" + user_id + ".json", "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, ensure_ascii=False)
             
     return {}
 
+@app.route('/getState', methods=["POST"])
+def get_state():
+    data = json.loads(request.get_data())
+    score = opportune_moment.get_total_score(data["user_id"], data["curr_loc"])
 
+    return jsonify({"state": 1, "score": score})
 
 
 if __name__ == "__main__":
