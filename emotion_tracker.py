@@ -4,10 +4,12 @@ import time
 import logging
 import scipy.stats
 import datetime
+import numpy as np
+from sklearn.preprocessing import normalize
 
 MINUTES = 60
 
-logging.basicConfig(filename="test.log", level=logging.DEBUG)
+logging.basicConfig(filename="emotion_tracker.log", level=logging.INFO)
 
 class EmotionTracker:
     def __init__(self):
@@ -84,7 +86,7 @@ class EmotionTracker:
             _new_index = self.time_list.index(self.last_timestamp) + 1        
         
         if len(self.time_list) == _new_index:
-            logging.debug(f'{self.last_timestamp}: fitbit data is pending.')
+            logging.info(f'{self.last_timestamp}: fitbit data is pending.')
             return
         
         self.last_timestamp = self.time_list[-1]
@@ -101,8 +103,11 @@ class EmotionTracker:
             if len(self.hr_list[start:end]) < 2:
                 self.last_timestamp = self.time_list[i-1]
                 break
-            _hr_cal_corr = scipy.stats.pearsonr(self.hr_list[start:end], self.act_calories_list[start:end])
-            if _hr_cal_corr.statistic == None:
+            # _hr_cal_corr = scipy.stats.pearsonr(self.hr_list[start:end], self.act_calories_list[start:end])
+            _hr_cal_corr = scipy.stats.pearsonr(normalize([np.array(self.hr_list[start:end])])[0], normalize([np.array(self.act_calories_list[start:end])])[0])
+            
+            logging.info(f'_hr_cal_corr: {_hr_cal_corr} at {self.time_list[i]}')
+            if _hr_cal_corr == np.NAN:
                 logging.error(f'No correlation value at {self.time_list[i]}.')
                 continue
             self.corr_buffer.append(_hr_cal_corr.statistic)
@@ -112,11 +117,11 @@ class EmotionTracker:
         for i in range(self.last_corr_index, len(self.corr_buffer) - 1):
             _change_rate = self.corr_buffer[i + 1] / self.corr_buffer[i]
             if _change_rate < self.change_rate_thr:
-                self._send_push(_change_rate, self.corr_start_timestamp_list[i])
+                self._send_push(_change_rate, self.corr_start_timestamp_list[i + 1])
         self.last_corr_index = len(self.corr_buffer) - 1
 
     def _send_push(self, change_rate, start_timestamp):
-        logging.debug(f'Corr. changed about {change_rate} at {start_timestamp}.')
+        logging.info(f'Corr. changed about {change_rate} at {start_timestamp}.')
 
     def run(self, date="today", g_hr="1min", g_act="1min"):
         self._reload_fitbit_data(date, g_hr, g_act)
@@ -125,7 +130,7 @@ class EmotionTracker:
 
     def deploy_run(self, date="today", g_hr="1min", g_act="1min"):
         while(1):
-            logging.debug(f'Reloading app at {datetime.datetime.now()}.')
+            logging.info(f'Reloading app at {datetime.datetime.now()}.')
             self.run(date, g_hr, g_act)
             time.sleep(self.time_window * MINUTES)
 
