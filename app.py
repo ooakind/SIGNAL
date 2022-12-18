@@ -55,6 +55,19 @@ def get_state():
 
     return jsonify({"state": 1, "score": score})
 
+@app.route('/getEmotionData', methods=["GET"])
+def get_emotion_data():
+    data = json.loads(request.get_data())
+    user_id = data["user_id"]
+
+    with open(f'emotion_data/{user_id}.json', 'r') as f:
+        _emotion_data = json.load(f)
+    emotion_data = _emotion_data["records"]
+    _emotion_data["records"].clear()
+    with open(f'emotion_data/{user_id}.json', 'w') as f:
+        json.dump(_emotion_data, f)
+
+    return jsonify({"emotion_data": emotion_data})
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=80)
