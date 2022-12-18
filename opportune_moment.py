@@ -35,7 +35,7 @@ def cal_pref_score(pref, time):
 
 def get_location_score(user_id, current_location):
     
-    with open("user/" + user_id + ".json", "r") as f:
+    with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
         json_object = json.load(f)
     
     pos_score = 0
@@ -111,7 +111,7 @@ def get_preference_score(preference, emotion_detected_time):
 
 def get_total_score(user_id, curr_loc):
 
-    with open("user/" + user_id + ".json", "r") as f:
+    with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
         user_info = json.load(f)
 
     location_score = get_location_score(user_info["user_id"], curr_loc)
