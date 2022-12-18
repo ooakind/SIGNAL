@@ -1,3 +1,5 @@
+import os
+import sys
 import json
 from fitbit import Fitbit
 import time
@@ -8,12 +10,15 @@ import numpy as np
 from sklearn.preprocessing import normalize
 
 MINUTES = 60
-
-logging.basicConfig(filename="emotion_tracker.log", level=logging.INFO)
+fitbit_data_dir = "fitbit_data/"
 
 class EmotionTracker:
-    def __init__(self):
-        self.fitbit = Fitbit()
+    def __init__(self, client_id):
+        logging.basicConfig(filename=f"{client_id}_emotion_tracker.log", level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+
+        self.client_id = client_id
+        self.fitbit = Fitbit(client_id)
+
         self.time_window = 15
         self.change_rate_thr = 0.5
 
@@ -34,16 +39,18 @@ class EmotionTracker:
         self.act_distance_list = []
         self.act_steps_list = []
         self.filepath_dict = {
-            "hr": "heartrate.json",
-            "act_calories": "activity_calories.json",
-            "act_distance": "activity_distance.json",
-            "act_steps": "activity_steps.json",
-            "act_elevation": "activity_elevation.json",
-            "act_floors": "activity_floors.json",
+            "hr": f"{fitbit_data_dir}_{self.client_id}_heartrate.json",
+            "act_calories": f'{fitbit_data_dir}_{self.client_id}_activity_calories.json',
+            "act_distance": f"{fitbit_data_dir}_{self.client_id}_activity_distance.json",
+            "act_steps": f"{fitbit_data_dir}_{self.client_id}_activity_steps.json",
+            "act_elevation": f"{fitbit_data_dir}_{self.client_id}_activity_elevation.json",
+            "act_floors": f"{fitbit_data_dir}_{self.client_id}_activity_floors.json",
         }
 
     def _reload_fitbit_data(self, date="today", g_hr="1min", g_act="1min"):
-        self.fitbit.get_heartrate(date=date, granularity=g_hr)
+        if not os.path.exists(fitbit_data_dir):
+            os.mkdir(fitbit_data_dir)
+        self.fitbit.get_heartrate(date=date, granularity=g_hr, filepath=self.filepath_dict["hr"])
         self.fitbit.get_activity(date=date, granularity=g_act, filepath=self.filepath_dict["act_calories"])
         self.fitbit.get_activity(date=date, resource="distance", granularity=g_act, filepath=self.filepath_dict["act_distance"])
         self.fitbit.get_activity(date=date, resource="steps", granularity=g_act, filepath=self.filepath_dict["act_steps"])
@@ -117,11 +124,20 @@ class EmotionTracker:
         for i in range(self.last_corr_index, len(self.corr_buffer) - 1):
             _change_rate = self.corr_buffer[i + 1] / self.corr_buffer[i]
             if _change_rate < self.change_rate_thr:
-                self._send_push(_change_rate, self.corr_start_timestamp_list[i + 1])
+                self._record_emotion_data(_change_rate, self.corr_start_timestamp_list[i + 1])
         self.last_corr_index = len(self.corr_buffer) - 1
 
-    def _send_push(self, change_rate, start_timestamp):
+    def _record_emotion_data(self, change_rate, start_timestamp):
+        _save_path = f'emotion_data/{self.client_id}.json'
         logging.info(f'Corr. changed about {change_rate} at {start_timestamp}.')
+        if not os.path.exists(_save_path):
+            with open(_save_path, 'w') as file:
+                json.dump({"records": []}, file)
+        with open(_save_path, 'r') as file:
+            records = json.load(file)
+        records["records"].append({start_timestamp: change_rate})
+        with open(_save_path, 'w') as file:
+            json.dump(records, file)
 
     def run(self, date="today", g_hr="1min", g_act="1min"):
         self._reload_fitbit_data(date, g_hr, g_act)
@@ -135,7 +151,7 @@ class EmotionTracker:
             time.sleep(self.time_window * MINUTES)
 
 if __name__ == "__main__":
-    emotion_tracker = EmotionTracker()
+    emotion_tracker = EmotionTracker(sys.argv[1])
     emotion_tracker.deploy_run()
         
 

@@ -4,18 +4,18 @@ import logging
 import requests
 
 class Fitbit:
-    def __init__(self):
-        if os.path.exists("fitbit_client_info.json"):
-            with open("fitbit_client_info.json", "r") as json_file:
+    def __init__(self, client_id):
+        if os.path.exists(f'{client_id}_fitbit_client_info.json'):
+            with open(f'{client_id}_fitbit_client_info.json', "r") as json_file:
                 info = json.load(json_file)
                 self.access_token = info["access_token"]
                 self.userid = info["userid"]
             if self.access_token == "" or self.userid == "":
-                logging.error("Please fill in the fields 'access_token' and 'userid' in 'fitbit_client_info.json' and try again.") 
+                logging.error(f"Please fill in the fields 'access_token' and 'userid' in '{client_id}_fitbit_client_info.json' and try again.") 
                 exit(1)   
         else:
-            logging.error("Please fill in the fields 'access_token' and 'userid' in 'fitbit_client_info.json' and try again.")
-            with open("fitbit_client_info.json", "w") as json_file:
+            logging.error(f"Please fill in the fields 'access_token' and 'userid' in '{client_id}_fitbit_client_info.json' and try again.")
+            with open(f"{client_id}_fitbit_client_info.json", "w") as json_file:
                 json.dump({"access_token": "", "userid": ""}, json_file)
             exit(1)
 
