@@ -7,4 +7,5 @@ public class Constants {
     static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
     static final String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
     static final String BASE_URL = "http://tbone.postech.ac.kr:5000";
+    static final String USER_ID = "test";
 }

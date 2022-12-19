@@ -114,7 +114,7 @@ public class MapActivity extends AppCompatActivity
     }
 
     public void getUserData(){ // get data from user config
-        Call<data_model> call = retrofit_client.getApiService().getData(new data_model("test", new ArrayList<HashMap<String, String>>(), "fast"));
+        Call<data_model> call = retrofit_client.getApiService().getData(new data_model(Constants.USER_ID, new ArrayList<HashMap<String, String>>(), "fast"));
         call.enqueue(new Callback<data_model>() {
             @Override
             public void onResponse(Call<data_model> call, Response<data_model> response) {
@@ -171,7 +171,7 @@ public class MapActivity extends AppCompatActivity
             locationData.add(hm);
         }
 
-        data_model dm = new data_model("test", locationData, userType);
+        data_model dm = new data_model(Constants.USER_ID, locationData, userType);
 
         Call<data_model> call = retrofit_client.getApiService().setData(dm);
         call.enqueue(new Callback<data_model>() {

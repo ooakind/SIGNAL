@@ -28,4 +28,7 @@ public interface Retrofit_interface {
 
     @GET("getEmotionData/{userId}")
     Call<emotion_data_model> getEmotionData(@Path("userId") String userId);
+
+    @POST("sendTargetNotificationData")
+    Call<HashMap<String, String>> sendTargetNotificationData(@Body target_notification_data_model dataModel);
 }

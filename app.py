@@ -3,6 +3,7 @@ from flask_restx import Api, Resource
 import json
 import os
 import opportune_moment
+import logging
 
 app = Flask(__name__)
 
@@ -91,7 +92,55 @@ def get_emotion_data(user_id):
         return jsonify({"user_id": user_id,"emotion_data": emotion_data, "error": ""})
 
     else:
-        return jsonify({"user_id": user_id, "emotion_data": "", "error": f'No user information: {user_id}'})
+        return jsonify({"user_id": user_id, "emotion_data": [], "error": f'No user information: {user_id}'})
+
+@app.route('/sendTargetNotificationData', methods=["POST"])
+def send_target_notification_data():
+    isDetected = "n"
+    data = request.get_json()
+    user_id = data["user_id"]
+    timestamp = data["timestamp"]
+    q1_answer = data["q1_answer"]
+    q2_answer = data["q2_answer"]
+    click_more_cnt = data["click_more_cnt"]
+
+    score = 0
+
+    if q1_answer == "eating":
+        score += 0
+    elif q1_answer == "working":
+        score += 0.7
+    elif q1_answer == "talking":
+        score += 0.7
+    elif q1_answer == "hobby":
+        score += 0.5
+    elif q1_answer == "moving":
+        score += 0.2
+    else:
+        score += 0.5
+    
+    if q2_answer == "yes":
+        score += 0.5
+    elif q2_answer == "no":
+        score += 0
+    
+    score += click_more_cnt * 0.3
+
+    if score >= 1:
+        isDetected = "y"
+
+    savepath = f'user/{user_id}.json'
+    if os.path.exists(savepath):
+        with open(savepath, 'r', encoding="cp949") as f:
+            user_data = json.load(f)
+        user_data["is_emotion_detected"] = isDetected
+        user_data["emotion_detect_time"] = timestamp
+        with open(savepath, "w", encoding="cp949") as f:
+            json.dump(f)
+    else:
+        logging.warn(f'{savepath} file does not exists.')
+            
+    return jsonify({"is_emotion_detected": isDetected})
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=5000)

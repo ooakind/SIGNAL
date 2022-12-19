@@ -37,7 +37,7 @@ public class PartnerService extends Service {
                     e.printStackTrace();
                 }
 
-                Call<HashMap<String, Double>> call = retrofit_client.getApiService().getPartnerState("test");
+                Call<HashMap<String, Double>> call = retrofit_client.getApiService().getPartnerState(Constants.USER_ID);
                 call.enqueue(new Callback<HashMap<String, Double>>() {
                     @Override
                     public void onResponse(Call<HashMap<String, Double>> call, Response<HashMap<String, Double>> response) {
