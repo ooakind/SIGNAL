@@ -91,7 +91,7 @@ def get_emotion_data(user_id):
     if os.path.exists(datapath):
         with open(datapath, 'r') as f:
             _emotion_data = json.load(f)
-        emotion_data = _emotion_data["records"]
+        emotion_data = _emotion_data["records"].copy()
         _emotion_data["records"].clear()
         with open(datapath, 'w') as f:
             json.dump(_emotion_data, f)
@@ -142,7 +142,7 @@ def send_target_notification_data():
         user_data["is_emotion_detected"] = isDetected
         user_data["emotion_detect_time"] = timestamp
         with open(savepath, "w", encoding="cp949") as f:
-            json.dump(f)
+            json.dump(user_data, f)
     else:
         logging.warn(f'{savepath} file does not exists.')
             
