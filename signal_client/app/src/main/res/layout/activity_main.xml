@@ -44,4 +44,11 @@
         android:text="finish"
         />
 
+    <Button
+        android:id="@+id/partnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="change to partner version"
+        />
+
 </LinearLayout >

@@ -58,11 +58,10 @@ public class LocationService extends Service {
             if (locationResult != null && locationResult.getLastLocation() != null){
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
-                connect(latitude, longitude);
 
                 HashMap<String, Double> ll = new HashMap<>();
                 ll.put("lat", latitude);
-                ll.put("lng", longitude);
+                ll.put("lng", latitude);
 
                 Call<HashMap<String, Double>> call = retrofit_client.getApiService().getState(new currentLocationDataModel("test", ll));
                 call.enqueue(new Callback<HashMap<String, Double>>() {
@@ -154,34 +153,4 @@ public class LocationService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void connect(double latitude, double longitude) {
-        mHandler = new Handler();
-        Thread checkUpdate = new Thread() {
-            public void run() {
-                try{
-                    socket = new Socket(Constants.IP, Constants.PORT);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    if (socket == null)
-                        System.out.println("???");
-                    System.out.println(socket.getOutputStream());
-                    dos = new DataOutputStream(socket.getOutputStream());
-                    dis = new DataInputStream(socket.getInputStream());
-                    dos.writeUTF(latitude + " " + longitude);
-                    dos.flush();
-
-                    locationState = dis.readInt();
-
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        };
-        checkUpdate.start();
-    }
 }

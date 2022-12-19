@@ -2,10 +2,13 @@ package com.csed.signal;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface Retrofit_interface {
     @POST("getData")
@@ -18,5 +21,9 @@ public interface Retrofit_interface {
 
     @POST("getState")
     Call<HashMap<String, Double>> getState(@Body currentLocationDataModel locModel);
+
+    @GET("getPartnerState")
+    Call<HashMap<String, Double>> getPartnerState(@Query("user_id") String user_id);
+
 
 }
