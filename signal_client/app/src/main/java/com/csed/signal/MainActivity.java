@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     startLocationService();
+                    startEmotionTrackingService();
                 }
             }
         });
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stopLocationService();
+                stopEmotionTrackingService();
             }
         });
 
@@ -112,6 +115,36 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
             Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isEmotionTrackingServiceRunning() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if (EmotionTrackingService.class.getName().equals(service.service.getClassName())) {
+                    if (service.foreground) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private void startEmotionTrackingService(){
+        Intent intent = new Intent(getApplicationContext(), EmotionTrackingService.class);
+//            intent.setAction(Constants.ACTION_START_EMOTION_TRACKING_SERVICE);
+        startService(intent);
+        Log.d("Emotion tracking","started");
+
+    }
+
+    private void stopEmotionTrackingService(){
+        Intent intent = new Intent(getApplicationContext(), EmotionTrackingService.class);
+//            intent.setAction(Constants.ACTION_STOP_EMOTION_TRACKING_SERVICE);
+        stopService(intent);
+        Log.d("Emotion tracking", "stopped");
     }
 
 

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TargetNotificationActivity"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Emotion regulation"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textQ1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:text="What are you doing now?"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:id="@+id/rdQ1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rQ1Eating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Eating something" />
+
+            <RadioButton
+                android:id="@+id/rQ1Working"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Working" />
+
+            <RadioButton
+                android:id="@+id/rQ1Talking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Talking with someone" />
+
+            <RadioButton
+                android:id="@+id/rQ1Hobby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Doing a hobby" />
+
+            <RadioButton
+                android:id="@+id/rQ1Moving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Moving somewhere" />
+
+            <RadioButton
+                android:id="@+id/rQ1Others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Others" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textQ2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:text="What would you like to hear more from your partner?"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/rdQ2"
+            android:layout_width="match_parent"
+            android:layout_height="161dp">
+
+            <RadioButton
+                android:id="@+id/rQ2select1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1" />
+
+            <RadioButton
+                android:id="@+id/rQ2select2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/buttonHearMore"
+                android:layout_width="158dp"
+                android:layout_height="wrap_content"
+                android:text="Want to hear more" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

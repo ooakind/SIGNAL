@@ -69,6 +69,19 @@
 
         <service android:name=".LocationService" />
 
+        <service
+            android:name=".EmotionTrackingService"
+            android:enabled="true"
+            android:exported="true" />
+        <activity
+            android:name=".TargetNotificationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />

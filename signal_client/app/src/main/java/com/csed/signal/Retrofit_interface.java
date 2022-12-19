@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Path;
 
 public interface Retrofit_interface {
     @POST("getData")
@@ -25,5 +26,6 @@ public interface Retrofit_interface {
     @GET("getPartnerState")
     Call<HashMap<String, Double>> getPartnerState(@Query("user_id") String user_id);
 
-
+    @GET("getEmotionData/{userId}")
+    Call<emotion_data_model> getEmotionData(@Path("userId") String userId);
 }
