@@ -107,8 +107,12 @@ def get_schedule_score(cred_file):
     return 1
 
 def get_preference_score(preference, emotion_detected_time):
+
+    if not emotion_detected_time:
+        return -100
+
     curr_time = datetime.datetime.now()
-    emotion_detected_datetime = datetime.datetime(*emotion_detected_time)
+    emotion_detected_datetime = datetime.datetime.strptime(emotion_detected_time, "%d-%m-%y %H:%M:%S")
     diff = (curr_time - emotion_detected_datetime).seconds / 3600
     
     return cal_pref_score(preference, diff)
@@ -121,7 +125,8 @@ def get_total_score(user_id, curr_loc):
 
     location_score = get_location_score(user_info["user_id"], curr_loc)
     schedule_score = get_schedule_score(user_info["cred_file"]) 
-    preference_score = get_preference_score(user_info["type"], [2022, 12, 19, 16, 10, 20])
+    # preference_score = get_preference_score(user_info["type"], [2022, 12, 19, 16, 10, 20])
+    preference_score = get_preference_score(user_info["type"], user_info.get("emotion_detect_time", []))
     
     print(location_score, schedule_score, preference_score)
 
