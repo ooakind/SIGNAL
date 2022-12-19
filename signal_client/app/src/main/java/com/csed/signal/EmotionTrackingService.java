@@ -30,7 +30,7 @@ public class EmotionTrackingService extends Service{
         @Override
         public void run() {
             while (working.get()) {
-                Call<emotion_data_model> call = retrofit_client.getApiService().getEmotionData("hyojin"); //EDIT
+                Call<emotion_data_model> call = retrofit_client.getApiService().getEmotionData(Constants.USER_ID); //EDIT
                 call.enqueue(new Callback<emotion_data_model>() {
                     @Override
                     public void onResponse(Call<emotion_data_model> call, Response<emotion_data_model> response) {
@@ -50,7 +50,7 @@ public class EmotionTrackingService extends Service{
                     }
                 });
                 try {
-                    Thread.sleep(10000); // 15 min: 900000
+                    Thread.sleep(900000); // 15 min: 900000
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

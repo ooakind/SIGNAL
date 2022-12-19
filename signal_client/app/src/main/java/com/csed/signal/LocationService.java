@@ -63,7 +63,7 @@ public class LocationService extends Service {
                 ll.put("lat", latitude);
                 ll.put("lng", latitude);
 
-                Call<HashMap<String, Double>> call = retrofit_client.getApiService().getState(new currentLocationDataModel("test", ll));
+                Call<HashMap<String, Double>> call = retrofit_client.getApiService().getState(new currentLocationDataModel(Constants.USER_ID, ll));
                 call.enqueue(new Callback<HashMap<String, Double>>() {
                     @Override
                     public void onResponse(Call<HashMap<String, Double>> call, Response<HashMap<String, Double>> response) {
