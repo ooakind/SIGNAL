@@ -55,6 +55,12 @@ def get_state():
 
     return jsonify({"state": 1, "score": score})
 
+@app.route('/getPartnerState', methods=["GET"])
+def get_partner_state():
+    data = 1
+    return jsonify({"state": 1, "score": 123})
+
+
 @app.route('/getEmotionData/<user_id>', methods=["GET"])
 def get_emotion_data(user_id):
     datapath = f'emotion_data/{user_id}.json'
