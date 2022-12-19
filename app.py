@@ -55,10 +55,8 @@ def get_state():
 
     return jsonify({"state": 1, "score": score})
 
-@app.route('/getEmotionData', methods=["GET"])
-def get_emotion_data():
-    data = json.loads(request.get_data())
-    user_id = data["user_id"]
+@app.route('/getEmotionData/<user_id>', methods=["GET"])
+def get_emotion_data(user_id):
     datapath = f'emotion_data/{user_id}.json'
 
     if os.path.exists(datapath):
@@ -68,10 +66,10 @@ def get_emotion_data():
         _emotion_data["records"].clear()
         with open(datapath, 'w') as f:
             json.dump(_emotion_data, f)
-        return jsonify({"emotion_data": emotion_data})
+        return jsonify({"user_id": user_id,"emotion_data": emotion_data, "error": ""})
 
     else:
-        return jsonify({"error": f'No user information: {user_id}'})
+        return jsonify({"user_id": user_id, "emotion_data": "", "error": f'No user information: {user_id}'})
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
