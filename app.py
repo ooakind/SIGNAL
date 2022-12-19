@@ -15,7 +15,7 @@ def get_data():
     data = json.loads(request.get_data())
     user_id = data["user_id"]
     if not os.path.exists("user/" + user_id + ".json"):
-        return {"user_id" : user_id, "latlng" : [], "type" : "unknown"}
+        return {"user_id" : user_id, "latlng" : [], "type" : "unknown", "is_emotion_detected" : "n"}
         
     with open("user/" + user_id + ".json", "r", encoding ="cp949") as f:
         json_object = json.load(f)
@@ -32,6 +32,7 @@ def set_data():
 
     latlng = []
     type_of_user = "unknown"
+    is_emotion_detected = "n"
 
     if os.path.exists("user/" + user_id + ".json"):
         with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
@@ -42,6 +43,8 @@ def set_data():
     data['latlng'] = data.get("latlng", latlng)
     data['type'] = data.get("type", type_of_user)
     data['cred_file'] = 'credential_test.json'
+    data["is_emotion_detected"] = data.get("is_emotion_detected", is_emotion_detected)
+
 
     with open("user/" + user_id + ".json", "w", encoding ='cp949') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
@@ -57,8 +60,21 @@ def get_state():
 
 @app.route('/getPartnerState', methods=["GET"])
 def get_partner_state():
-    data = 1
-    return jsonify({"state": 1, "score": 123})
+
+    user_id = request.args.get("user_id", "test")
+    with open("user/" + user_id + ".json", "r", encoding='cp949') as f:
+        data = json.load(f)
+        
+
+    if data["is_emotion_detected"] == "y":
+        state = 1
+        data["is_emotion_detected"] = "n"
+        with open("user/" + user_id + ".json", "w", encoding="cp949") as f:
+            json.dump(data, f)
+    else:
+        state = 0
+
+    return jsonify({"state": state})
 
 
 @app.route('/getEmotionData/<user_id>', methods=["GET"])
