@@ -16,7 +16,7 @@ def get_data():
     data = json.loads(request.get_data())
     user_id = data["user_id"]
     if not os.path.exists("user/" + user_id + ".json"):
-        return {"user_id" : user_id, "latlng" : [], "type" : "unknown", "is_emotion_detected" : "n"}
+        return {"user_id" : user_id, "latlng" : [], "type" : "unknown", "is_emotion_detected" : "n", "push_to_partner" : "n"}
         
     with open("user/" + user_id + ".json", "r", encoding ="cp949") as f:
         json_object = json.load(f)
@@ -34,17 +34,22 @@ def set_data():
     latlng = []
     type_of_user = "unknown"
     is_emotion_detected = "n"
+    push_to_partner = "n"
 
     if os.path.exists("user/" + user_id + ".json"):
         with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
             json_object = json.load(f)
             latlng = json_object["latlng"]
             type_of_user = json_object["type"]
+            is_emotion_detected = json_object["is_emotion_detected"]
+            push_to_partner = json_object["push_to_partner"]
+
 
     data['latlng'] = data.get("latlng", latlng)
     data['type'] = data.get("type", type_of_user)
     data['cred_file'] = 'credential_test.json'
     data["is_emotion_detected"] = data.get("is_emotion_detected", is_emotion_detected)
+    data["push_to_partner"] = data.get("push_to_partner", push_to_partner)
 
 
     with open("user/" + user_id + ".json", "w", encoding ='cp949') as f:
@@ -67,8 +72,9 @@ def get_partner_state():
         data = json.load(f)
         
 
-    if data["is_emotion_detected"] == "y":
+    if data["push_to_partner"] == "y":
         state = 1
+        data["push_to_partner"] = "n"
         data["is_emotion_detected"] = "n"
         with open("user/" + user_id + ".json", "w", encoding="cp949") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)

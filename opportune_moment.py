@@ -123,6 +123,9 @@ def get_total_score(user_id, curr_loc):
     with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
         user_info = json.load(f)
 
+    if user_info["is_emotion_detected"] == "n":
+        return -1000
+
     location_score = get_location_score(user_info["user_id"], curr_loc)
     schedule_score = get_schedule_score(user_info["cred_file"]) 
     # preference_score = get_preference_score(user_info["type"], [2022, 12, 19, 16, 10, 20])
@@ -137,7 +140,7 @@ def get_total_score(user_id, curr_loc):
 
     if total_score > THRESHOLD:
         with open("user/" + user_id + ".json", "w", encoding ='cp949') as f:
-            user_info["is_emotion_detected"] = "y"
+            user_info["push_to_partner"] = "y"
             json.dump(user_info, f, indent=2, ensure_ascii=False)
 
     return total_score
