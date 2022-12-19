@@ -131,11 +131,11 @@ def send_target_notification_data():
 
     savepath = f'user/{user_id}.json'
     if os.path.exists(savepath):
-        with open(savepath, 'r') as f:
+        with open(savepath, 'r', encoding="cp949") as f:
             user_data = json.load(f)
         user_data["is_emotion_detected"] = isDetected
         user_data["emotion_detect_time"] = timestamp
-        with open(savepath, "w") as f:
+        with open(savepath, "w", encoding="cp949") as f:
             json.dump(f)
     else:
         logging.warn(f'{savepath} file does not exists.')
