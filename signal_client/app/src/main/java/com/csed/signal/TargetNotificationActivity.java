@@ -11,9 +11,7 @@ import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.lang.reflect.Field;
-<<<<<<< HEAD
 import java.util.Random;
-=======
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,8 +21,6 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
->>>>>>> bc82a84 (add target notification answer feature)
-
 
 public class TargetNotificationActivity extends AppCompatActivity {
 
