@@ -91,7 +91,7 @@ def get_emotion_data(user_id):
         return jsonify({"user_id": user_id,"emotion_data": emotion_data, "error": ""})
 
     else:
-        return jsonify({"user_id": user_id, "emotion_data": "", "error": f'No user information: {user_id}'})
+        return jsonify({"user_id": user_id, "emotion_data": [], "error": f'No user information: {user_id}'})
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=5000)
