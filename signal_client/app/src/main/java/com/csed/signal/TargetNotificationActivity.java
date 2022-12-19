@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 
 public class TargetNotificationActivity extends AppCompatActivity {
@@ -42,8 +43,16 @@ public class TargetNotificationActivity extends AppCompatActivity {
         findViewById(R.id.buttonHearMore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaPlayer = MediaPlayer.create(TargetNotificationActivity.this, R.raw.sample2);
-                mediaPlayer.start();
+                Field[] fields=R.raw.class.getFields();
+                int randomIdx = new Random().nextInt(fields.length);
+                try {
+                    int sampleIdx = fields[randomIdx].getInt(fields[randomIdx]);
+                    mediaPlayer = MediaPlayer.create(TargetNotificationActivity.this, sampleIdx);
+                    mediaPlayer.start();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
