@@ -70,7 +70,7 @@ def get_partner_state():
         state = 1
         data["is_emotion_detected"] = "n"
         with open("user/" + user_id + ".json", "w", encoding="cp949") as f:
-            json.dump(data, f)
+            json.dump(data, f, indent=2, ensure_ascii=False)
     else:
         state = 0
 
