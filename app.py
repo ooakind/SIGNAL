@@ -17,7 +17,7 @@ def get_data():
     if not os.path.exists("user/" + user_id + ".json"):
         return {"user_id" : user_id, "latlng" : [], "type" : "unknown"}
         
-    with open("user/" + user_id + ".json", "r") as f:
+    with open("user/" + user_id + ".json", "r", encoding ="cp949") as f:
         json_object = json.load(f)
 
     del(json_object["cred_file"])
@@ -34,7 +34,7 @@ def set_data():
     type_of_user = "unknown"
 
     if os.path.exists("user/" + user_id + ".json"):
-        with open("user/" + user_id + ".json", "r") as f:
+        with open("user/" + user_id + ".json", "r", encoding ='cp949') as f:
             json_object = json.load(f)
             latlng = json_object["latlng"]
             type_of_user = json_object["type"]
@@ -43,7 +43,7 @@ def set_data():
     data['type'] = data.get("type", type_of_user)
     data['cred_file'] = 'credential_test.json'
 
-    with open("user/" + user_id + ".json", "w") as f:
+    with open("user/" + user_id + ".json", "w", encoding ='cp949') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
             
     return {}
@@ -72,4 +72,4 @@ def get_emotion_data(user_id):
         return jsonify({"user_id": user_id, "emotion_data": "", "error": f'No user information: {user_id}'})
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
